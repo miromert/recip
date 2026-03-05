@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Print Stylesheet — clean recipe-only output
+   ============================================================ */
+@media print {
+    /* Hide non-recipe elements */
+    nav,
+    footer,
+    .no-print,
+    button,
+    form,
+    [x-cloak] {
+        display: none !important;
+    }
+
+    /* Clean layout */
+    body {
+        font-size: 12pt;
+        color: #000;
+        background: #fff;
+    }
+
+    article {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    img {
+        max-height: 300px;
+        object-fit: cover;
+    }
+
+    /* Keep ingredient checkboxes visible in print */
+    input[type="checkbox"] {
+        display: inline-block !important;
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    /* Avoid page breaks inside steps */
+    li {
+        break-inside: avoid;
+    }
+}
+
+/* Hide x-cloak elements until Alpine inits */
+[x-cloak] {
+    display: none !important;
+}
