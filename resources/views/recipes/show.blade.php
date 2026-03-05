@@ -29,7 +29,7 @@
     @endphp
 
     <x-slot name="title">{{ $recipe->title }}</x-slot>
-    <x-slot name="metaDescription">{{ $recipe->description ?? 'A recipe on SkipToRecipe' }}</x-slot>
+    <x-slot name="metaDescription">{{ $recipe->description ?? 'A recipe on Recip' }}</x-slot>
     <x-slot name="ogType">article</x-slot>
     @if($recipe->image_path)
         <x-slot name="ogImage">{{ asset('storage/' . $recipe->image_path) }}</x-slot>

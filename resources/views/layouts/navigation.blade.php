@@ -5,7 +5,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('home') }}" class="text-xl font-bold text-orange-600 hover:text-orange-700">
-                        SkipToRecipe
+                        Recip
                     </a>
                 </div>
 

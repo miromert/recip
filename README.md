@@ -1,8 +1,8 @@
-# SkipToRecipe
+# Recip
 
-**No life stories. No endless scrolling. Just the recipe.**
+**Less reading, more cooking.**
 
-SkipToRecipe is an open-source, community-driven recipe website built for people who just want to cook. No 2,000-word preambles about grandmother's kitchen. No cookie-tracking. No dark patterns. Just clean, well-formatted recipes with easy metric/imperial conversion.
+Recip is an open-source, community-driven recipe website built for people who just want to cook. No 2,000-word preambles about grandmother's kitchen. No cookie-tracking. No dark patterns. Just clean, well-formatted recipes with easy metric/imperial conversion.
 
 ## Why?
 
@@ -13,7 +13,7 @@ Every recipe website has the same problems:
 - Cookie consent banners, pop-ups, and newsletter modals
 - Slow, ad-heavy pages that take forever to load
 
-SkipToRecipe fixes all of that.
+Recip fixes all of that.
 
 ## Features
 
@@ -47,8 +47,8 @@ SkipToRecipe fixes all of that.
 
 ```bash
 # Clone the repo
-git clone https://github.com/YOUR_USERNAME/skiptorecipe.git
-cd skiptorecipe
+git clone https://github.com/YOUR_USERNAME/recip.git
+cd recip
 
 # Install PHP dependencies
 composer install
@@ -64,7 +64,7 @@ php artisan key:generate
 
 # Configure your database in .env
 # DB_CONNECTION=mariadb
-# DB_DATABASE=skiptorecipe
+# DB_DATABASE=recip
 # DB_USERNAME=your_user
 # DB_PASSWORD=your_password
 
@@ -87,7 +87,7 @@ Visit `http://localhost:8000` and start cooking.
 
 After seeding, an admin account is created:
 
-- **Email:** admin@skiptorecipe.com
+- **Email:** admin@recip.cooking
 - **Password:** password
 
 Change this immediately in production.

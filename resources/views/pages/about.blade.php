@@ -2,14 +2,14 @@
     <x-slot name="title">About</x-slot>
 
     <div class="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8 prose prose-gray">
-        <h1>About SkipToRecipe</h1>
+        <h1>About Recip</h1>
 
         <p>
             We're tired of recipe websites that make you scroll through someone's childhood memories, close five cookie banners,
             dodge auto-playing videos, and fight through a wall of ads — just to find out how much flour you need.
         </p>
 
-        <p><strong>SkipToRecipe is different:</strong></p>
+        <p><strong>Recip is different:</strong></p>
 
         <ul>
             <li><strong>No life stories.</strong> Just the recipe. Descriptions are capped at 300 characters.</li>

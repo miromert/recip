@@ -21,7 +21,7 @@
                 <x-input-label for="description" value="Short Description (optional, max 300 chars)" />
                 <textarea id="description" name="description" rows="2" maxlength="300"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
-                    placeholder="Keep it brief. No life stories.">{{ old('description') }}</textarea>
+                    placeholder="Keep it brief. Just the essentials.">{{ old('description') }}</textarea>
                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
             </div>
 

@@ -4,7 +4,7 @@
     <div class="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8 prose prose-gray">
         <h1>Privacy Policy</h1>
 
-        <p><strong>SkipToRecipe takes your privacy seriously.</strong></p>
+        <p><strong>Recip takes your privacy seriously.</strong></p>
 
         <h2>What we collect</h2>
         <ul>

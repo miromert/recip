@@ -5,12 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ isset($title) ? $title . ' — ' : '' }}{{ config('app.name', 'SkipToRecipe') }}</title>
-        <meta name="description" content="{{ $metaDescription ?? 'No life stories. No endless scrolling. Just the recipe. With easy metric/imperial conversion.' }}">
+        <title>{{ isset($title) ? $title . ' — ' : '' }}{{ config('app.name', 'Recip') }}</title>
+        <meta name="description" content="{{ $metaDescription ?? 'Less reading, more cooking. Recipes with easy metric/imperial conversion.' }}">
 
         {{-- Open Graph --}}
         <meta property="og:title" content="{{ $title ?? config('app.name') }}">
-        <meta property="og:description" content="{{ $metaDescription ?? 'No life stories. Just the recipe.' }}">
+        <meta property="og:description" content="{{ $metaDescription ?? 'Less reading, more cooking.' }}">
         <meta property="og:type" content="{{ $ogType ?? 'website' }}">
         @isset($ogImage)
             <meta property="og:image" content="{{ $ogImage }}">
@@ -67,7 +67,7 @@
                 <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
                     <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
                         <div class="text-sm text-gray-500">
-                            &copy; {{ date('Y') }} SkipToRecipe — No life stories. Just recipes.
+                            &copy; {{ date('Y') }} Recip — Less reading, more cooking.
                         </div>
                         <div class="flex gap-6 text-sm text-gray-500">
                             <a href="{{ route('about') }}" class="hover:text-gray-700">About</a>

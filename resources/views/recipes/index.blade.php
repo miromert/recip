@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <!-- Hero Section -->
         <div class="text-center mb-10">
-            <h1 class="text-3xl font-bold text-gray-900">No life stories. Just recipes.</h1>
+            <h1 class="text-3xl font-bold text-gray-900">Less reading, more cooking.</h1>
             <p class="text-gray-500 mt-2">Community-driven recipes with easy metric/imperial conversion.</p>
         </div>
 

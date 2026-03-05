@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $admin = User::create([
             'name' => 'Admin',
             'username' => 'admin',
-            'email' => 'admin@skiptorecipe.com',
+            'email' => 'admin@recip.cooking',
             'password' => Hash::make('password'),
             'is_admin' => true,
         ]);
