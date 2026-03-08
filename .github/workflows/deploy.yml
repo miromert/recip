@@ -9,9 +9,6 @@ jobs:
     steps:
       - run: |
           cd ~/recip
+          docker-compose down
           git pull origin main
-          ./vendor/bin/sail composer install --no-dev
-          ./vendor/bin/sail artisan migrate --force
-          ./vendor/bin/sail artisan config:cache
-          ./vendor/bin/sail artisan route:cache
-          ./vendor/bin/sail artisan view:cache
+          docker-compose up -d --build
