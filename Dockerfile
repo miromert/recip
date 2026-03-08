@@ -56,6 +56,9 @@ COPY docker/php.ini /usr/local/etc/php/conf.d/99-recip.ini
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
+# Stash built public assets so entrypoint can sync them into the volume
+RUN cp -a /var/www/html/public /var/www/html/public-build
+
 # Copy and set entrypoint
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
