@@ -24,7 +24,7 @@ class SecurityHeadersMiddleware
         if (app()->environment('production')) {
             $response->headers->set('Content-Security-Policy', implode('; ', [
                 "default-src 'self'",
-                "script-src 'self' 'unsafe-eval' https://challenges.cloudflare.com",  // unsafe-eval required by Alpine.js
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",  // unsafe-inline + unsafe-eval required by Vite + Alpine.js
                 "style-src 'self' 'unsafe-inline' https://fonts.bunny.net",
                 "font-src 'self' https://fonts.bunny.net",
                 "img-src 'self' data:",
