@@ -29,7 +29,6 @@ Recip fixes all of that.
 - **Full-text search** — Find recipes fast
 - **SEO-friendly** — Clean URLs, meta tags, Open Graph support
 - **Responsive** — Works on desktop, tablet, and mobile
-- **Docker-ready** — One command to deploy with Cloudflare Tunnel
 
 ## Tech Stack
 
@@ -38,7 +37,6 @@ Recip fixes all of that.
 - **Database:** MariaDB 11
 - **Auth:** Laravel Breeze (Blade stack) + email verification
 - **Build:** Vite
-- **Deploy:** Docker + Nginx + Cloudflare Tunnel
 
 ---
 
@@ -81,93 +79,6 @@ php artisan serve # Terminal 2
 ```
 
 ---
-
-## Self-Hosting with Docker
-
-Recip ships with a production-ready Docker setup: **Nginx + PHP-FPM + MariaDB + Cloudflare Tunnel** — all behind a single `docker compose` command.
-
-### Prerequisites
-
-- Docker & Docker Compose
-- A Cloudflare account (free tier works)
-- A domain pointed to Cloudflare DNS
-
-### 1. Configure
-
-```bash
-cp .env.production.example .env
-```
-
-Edit `.env` and fill in all `CHANGE_ME` values:
-
-| Variable | What to set |
-|---|---|
-| `APP_KEY` | Run `docker compose run --rm app php artisan key:generate --show` |
-| `APP_URL` | `https://yourdomain.com` |
-| `DB_PASSWORD` | A strong random password |
-| `DB_ROOT_PASSWORD` | A different strong random password |
-| `MAIL_HOST` | Your SMTP host (see Mail section below) |
-| `MAIL_PASSWORD` | Your SMTP password / API key |
-| `TURNSTILE_SITE_KEY` | From Cloudflare Dashboard → Turnstile |
-| `TURNSTILE_SECRET_KEY` | From Cloudflare Dashboard → Turnstile |
-| `TUNNEL_TOKEN` | From Cloudflare Dashboard → Zero Trust → Tunnels |
-
-### 2. Deploy
-
-```bash
-# Build and start all containers
-docker compose --profile production up -d
-
-# Seed the database (first time only)
-docker compose exec app php artisan db:seed
-```
-
-The app runs on port **3080** internally. With the `production` profile, Cloudflare Tunnel handles public access — no ports need to be exposed to the internet.
-
-### 3. Cloudflare Tunnel Setup
-
-1. Go to [Cloudflare Zero Trust](https://one.dash.cloudflare.com/) → **Networks** → **Tunnels**
-2. Create a tunnel, copy the token into `TUNNEL_TOKEN` in `.env`
-3. Add a **public hostname** pointing your domain to `http://nginx:80`
-4. DNS is managed automatically by Cloudflare
-
-### 4. Updating
-
-```bash
-git pull
-docker compose build
-docker compose --profile production up -d
-# Migrations run automatically on container start
-```
-
----
-
-## Mail Configuration
-
-Mail is configured via plain SMTP env vars — **zero code changes** to switch providers:
-
-| Provider | `MAIL_HOST` | `MAIL_PORT` | `MAIL_SCHEME` | `MAIL_USERNAME` | `MAIL_PASSWORD` |
-|---|---|---|---|---|---|
-| **Resend** | `smtp.resend.com` | `465` | `tls` | `resend` | `re_xxxxx` |
-| **Mailgun** | `smtp.mailgun.org` | `587` | `tls` | your username | your password |
-| **Self-hosted** | `mail.yourdomain.com` | `587` | `null` | your username | your password |
-
-To switch providers, change those 5 env vars and restart:
-
-```bash
-docker compose restart app
-```
-
----
-
-## Default Admin Account
-
-After seeding, an admin account is created:
-
-- **Email:** admin@recip.cooking
-- **Password:** password
-
-Change this immediately in production.
 
 ## Project Structure
 
@@ -230,8 +141,6 @@ Default unit system is metric. Users can toggle anytime — no account required.
 - **Honeypot field** catches basic bots
 - **Rate limiting** on login (10/min), registration (5/min), password reset (5/min)
 - **Security headers** — X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy
-- **HTTPS enforced** in production
-- **Encrypted sessions** in production
 - **No tracking** — zero analytics, zero third-party scripts
 
 ## Contributing
