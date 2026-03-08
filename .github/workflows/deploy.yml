@@ -1,0 +1,17 @@
+#Every time there is an update on main, server pulls on auto.
+name: Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - run: |
+          cd ~/recip
+          git pull origin main
+          ./vendor/bin/sail composer install --no-dev
+          ./vendor/bin/sail artisan migrate --force
+          ./vendor/bin/sail artisan config:cache
+          ./vendor/bin/sail artisan route:cache
+          ./vendor/bin/sail artisan view:cache
