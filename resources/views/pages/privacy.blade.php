@@ -13,6 +13,12 @@
             <li><strong>Session cookie:</strong> A strictly functional cookie is used to keep you logged in. It contains no tracking data.</li>
         </ul>
 
+        <h2>Email verification</h2>
+        <p>We require email verification when you register. A single transactional email is sent to confirm your address. We do not send marketing emails or newsletters.</p>
+
+        <h2>Bot protection</h2>
+        <p>We use <a href="https://www.cloudflare.com/products/turnstile/" target="_blank" rel="noopener">Cloudflare Turnstile</a> on our registration form to prevent automated abuse. Turnstile is a privacy-preserving CAPTCHA alternative that does <strong>not</strong> use cookies or track you across the web. It runs a brief, non-interactive challenge in your browser to verify you're human.</p>
+
         <h2>What we don't do</h2>
         <ul>
             <li>We do <strong>not</strong> use analytics tracking (no Google Analytics, no Facebook Pixel, nothing).</li>
@@ -22,7 +28,7 @@
         </ul>
 
         <h2>Ads</h2>
-        <p>We display minimal, contextual ads to cover hosting costs. These ads are served by privacy-respecting ad networks that do <strong>not</strong> use cookies or track you across the web.</p>
+        <p>We may display minimal, contextual ads to cover hosting costs. These ads are served by privacy-respecting ad networks that do <strong>not</strong> use cookies or track you across the web.</p>
 
         <h2>Your unit preference</h2>
         <p>Your metric/imperial preference is stored in your browser's <code>localStorage</code> — it never leaves your device.</p>
@@ -31,6 +37,6 @@
         <p>You can delete your account at any time from your profile settings. This will permanently remove your account data and all your recipes.</p>
 
         <h2>Contact</h2>
-        <p>Questions? Open an issue on our <a href="https://github.com" target="_blank" rel="noopener">GitHub repository</a>.</p>
+        <p>Questions? Open an issue on our <a href="https://github.com/miromert/recip" target="_blank" rel="noopener">GitHub repository</a>.</p>
     </div>
 </x-app-layout>

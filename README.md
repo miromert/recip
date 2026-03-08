@@ -19,6 +19,8 @@ Recip fixes all of that.
 
 - **Instant unit conversion** — Toggle between metric and imperial with one click (stored in localStorage, no account needed)
 - **Community recipes** — Anyone can sign up and publish recipes immediately
+- **Email verification** — New accounts must verify their email before posting
+- **Cloudflare Turnstile** — Privacy-preserving bot protection on registration (no cookies)
 - **Upvote system** — Good recipes rise to the top (upvote-only, no downvotes)
 - **Clean print view** — Print any recipe without nav bars, ads, or clutter
 - **Structured data** — Every recipe includes JSON-LD for rich Google search results
@@ -27,61 +29,136 @@ Recip fixes all of that.
 - **Full-text search** — Find recipes fast
 - **SEO-friendly** — Clean URLs, meta tags, Open Graph support
 - **Responsive** — Works on desktop, tablet, and mobile
+- **Docker-ready** — One command to deploy with Cloudflare Tunnel
 
 ## Tech Stack
 
 - **Backend:** PHP 8.4 + Laravel 12
 - **Frontend:** Tailwind CSS + Alpine.js
-- **Database:** MariaDB / MySQL
-- **Auth:** Laravel Breeze (Blade stack)
+- **Database:** MariaDB 11
+- **Auth:** Laravel Breeze (Blade stack) + email verification
 - **Build:** Vite
+- **Deploy:** Docker + Nginx + Cloudflare Tunnel
 
-## Requirements
+---
+
+## Quick Start (Local Development)
+
+### Requirements
 
 - PHP 8.2+
 - Composer
 - Node.js 18+
 - MariaDB 10.6+ or MySQL 8.0+
 
-## Installation
+### Setup
 
 ```bash
-# Clone the repo
-git clone https://github.com/YOUR_USERNAME/recip.git
+git clone https://github.com/miromert/recip.git
 cd recip
 
-# Install PHP dependencies
 composer install
-
-# Install JS dependencies
 npm install
 
-# Copy environment file
 cp .env.example .env
-
-# Generate app key
 php artisan key:generate
 
-# Configure your database in .env
-# DB_CONNECTION=mariadb
-# DB_DATABASE=recip
-# DB_USERNAME=your_user
-# DB_PASSWORD=your_password
-
-# Run migrations and seed
+# Configure database in .env, then:
 php artisan migrate --seed
-
-# Create storage symlink (for recipe images)
 php artisan storage:link
-
-# Build frontend assets
 npm run build
 
-# Start the dev server
 php artisan serve
 ```
 
 Visit `http://localhost:8000` and start cooking.
+
+### Development (hot reload)
+
+```bash
+npm run dev       # Terminal 1
+php artisan serve # Terminal 2
+```
+
+---
+
+## Self-Hosting with Docker
+
+Recip ships with a production-ready Docker setup: **Nginx + PHP-FPM + MariaDB + Cloudflare Tunnel** — all behind a single `docker compose` command.
+
+### Prerequisites
+
+- Docker & Docker Compose
+- A Cloudflare account (free tier works)
+- A domain pointed to Cloudflare DNS
+
+### 1. Configure
+
+```bash
+cp .env.production.example .env
+```
+
+Edit `.env` and fill in all `CHANGE_ME` values:
+
+| Variable | What to set |
+|---|---|
+| `APP_KEY` | Run `docker compose run --rm app php artisan key:generate --show` |
+| `APP_URL` | `https://yourdomain.com` |
+| `DB_PASSWORD` | A strong random password |
+| `DB_ROOT_PASSWORD` | A different strong random password |
+| `MAIL_HOST` | Your SMTP host (see Mail section below) |
+| `MAIL_PASSWORD` | Your SMTP password / API key |
+| `TURNSTILE_SITE_KEY` | From Cloudflare Dashboard → Turnstile |
+| `TURNSTILE_SECRET_KEY` | From Cloudflare Dashboard → Turnstile |
+| `TUNNEL_TOKEN` | From Cloudflare Dashboard → Zero Trust → Tunnels |
+
+### 2. Deploy
+
+```bash
+# Build and start all containers
+docker compose --profile production up -d
+
+# Seed the database (first time only)
+docker compose exec app php artisan db:seed
+```
+
+The app runs on port **3080** internally. With the `production` profile, Cloudflare Tunnel handles public access — no ports need to be exposed to the internet.
+
+### 3. Cloudflare Tunnel Setup
+
+1. Go to [Cloudflare Zero Trust](https://one.dash.cloudflare.com/) → **Networks** → **Tunnels**
+2. Create a tunnel, copy the token into `TUNNEL_TOKEN` in `.env`
+3. Add a **public hostname** pointing your domain to `http://nginx:80`
+4. DNS is managed automatically by Cloudflare
+
+### 4. Updating
+
+```bash
+git pull
+docker compose build
+docker compose --profile production up -d
+# Migrations run automatically on container start
+```
+
+---
+
+## Mail Configuration
+
+Mail is configured via plain SMTP env vars — **zero code changes** to switch providers:
+
+| Provider | `MAIL_HOST` | `MAIL_PORT` | `MAIL_SCHEME` | `MAIL_USERNAME` | `MAIL_PASSWORD` |
+|---|---|---|---|---|---|
+| **Resend** | `smtp.resend.com` | `465` | `tls` | `resend` | `re_xxxxx` |
+| **Mailgun** | `smtp.mailgun.org` | `587` | `tls` | your username | your password |
+| **Self-hosted** | `mail.yourdomain.com` | `587` | `null` | your username | your password |
+
+To switch providers, change those 5 env vars and restart:
+
+```bash
+docker compose restart app
+```
+
+---
 
 ## Default Admin Account
 
@@ -91,14 +168,6 @@ After seeding, an admin account is created:
 - **Password:** password
 
 Change this immediately in production.
-
-## Development
-
-```bash
-# Run the dev server with hot reload
-npm run dev       # In one terminal
-php artisan serve # In another terminal
-```
 
 ## Project Structure
 
@@ -113,15 +182,21 @@ app/
 │   │   ├── UserProfileController.php # Public profiles
 │   │   └── AdminController.php       # Admin dashboard
 │   └── Middleware/
-│       └── AdminMiddleware.php
+│       ├── AdminMiddleware.php
+│       └── SecurityHeadersMiddleware.php
 ├── Models/
 │   ├── Recipe.php
 │   ├── Ingredient.php
+│   ├── KnownIngredient.php
 │   ├── Step.php
 │   ├── Category.php
 │   ├── Tag.php
 │   ├── Vote.php
 │   └── Report.php
+docker/
+├── nginx.conf                    # Nginx virtual host
+├── php.ini                       # Production PHP settings
+└── entrypoint.sh                 # Container startup script
 resources/
 ├── views/
 │   ├── recipes/          # Index, show, create, edit
@@ -147,6 +222,17 @@ The unit conversion system runs entirely client-side using Alpine.js and localSt
 | L          | cups                  |
 
 Default unit system is metric. Users can toggle anytime — no account required.
+
+## Security
+
+- **Email verification** required before posting
+- **Cloudflare Turnstile** CAPTCHA on registration (privacy-preserving, no tracking cookies)
+- **Honeypot field** catches basic bots
+- **Rate limiting** on login (10/min), registration (5/min), password reset (5/min)
+- **Security headers** — X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy
+- **HTTPS enforced** in production
+- **Encrypted sessions** in production
+- **No tracking** — zero analytics, zero third-party scripts
 
 ## Contributing
 

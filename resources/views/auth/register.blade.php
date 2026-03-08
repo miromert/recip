@@ -1,4 +1,8 @@
 <x-guest-layout>
+    @push('scripts')
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    @endpush
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -45,6 +49,20 @@
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
+
+        <!-- Honeypot (hidden from real users, bots will fill it) -->
+        <div style="display:none" aria-hidden="true">
+            <label for="website">Website</label>
+            <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <!-- Cloudflare Turnstile -->
+        @if(config('services.turnstile.site_key'))
+            <div class="mt-4">
+                <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}" data-theme="light"></div>
+                <x-input-error :messages="$errors->get('cf-turnstile-response')" class="mt-2" />
+            </div>
+        @endif
 
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">

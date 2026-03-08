@@ -21,7 +21,7 @@ Route::view('/privacy', 'pages.privacy')->name('privacy');
 Route::view('/about', 'pages.about')->name('about');
 
 // Authenticated routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     // Ingredient autocomplete
     Route::get('/api/ingredients', [IngredientController::class, 'search'])->name('api.ingredients.search');
 

@@ -22,3 +22,6 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+docker-compose.override.yml
+storage/app/public/recipes/*
+!storage/app/public/recipes/.gitkeep
