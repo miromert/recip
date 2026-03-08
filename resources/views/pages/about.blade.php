@@ -31,7 +31,7 @@
         <h2>Contribute</h2>
         <p>
             This is an open-source project. Found a bug? Want a feature? Submit a pull request or open an issue on
-            <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>.
+            <a href="https://github.com/miromert/recip" target="_blank" rel="noopener">GitHub</a>.
         </p>
     </div>
 </x-app-layout>

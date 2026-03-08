@@ -72,7 +72,7 @@
                         <div class="flex gap-6 text-sm text-gray-500">
                             <a href="{{ route('about') }}" class="hover:text-gray-700">About</a>
                             <a href="{{ route('privacy') }}" class="hover:text-gray-700">Privacy</a>
-                            <a href="https://github.com" target="_blank" rel="noopener" class="hover:text-gray-700">GitHub</a>
+                            <a href="https://github.com/miromert/recip" target="_blank" rel="noopener" class="hover:text-gray-700">GitHub</a>
                         </div>
                     </div>
                 </div>
