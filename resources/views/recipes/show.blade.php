@@ -178,6 +178,14 @@
                         @endguest
                     </div>
 
+                    <!-- Basket Button -->
+                    <button @click="$store.basket.toggle({ id: {{ $recipe->id }}, slug: '{{ $recipe->slug }}', title: '{{ e($recipe->title) }}' })"
+                        class="flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors"
+                        :class="$store.basket.has({{ $recipe->id }}) ? 'bg-orange-100 border-orange-300 text-orange-700' : 'border-[#d5cec2] text-[#666] hover:bg-[#ece6dc]'">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
+                        <span x-text="$store.basket.has({{ $recipe->id }}) ? 'In Basket ✓' : 'Add to Basket'"></span>
+                    </button>
+
                     <!-- Print Button -->
                     <button onclick="window.print()" class="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#d5cec2] text-[#666] hover:bg-[#ece6dc] transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
