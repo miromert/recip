@@ -230,5 +230,123 @@ Alpine.data('ingredientAutocomplete', (ingredient) => ({
     },
 }));
 
+// ============================================================
+// Basket Store (localStorage-based, no login required)
+// ============================================================
+Alpine.store('basket', {
+    items: JSON.parse(localStorage.getItem('basket') || '[]'),
+
+    save() {
+        localStorage.setItem('basket', JSON.stringify(this.items));
+        window.dispatchEvent(new CustomEvent('basket-updated'));
+    },
+
+    add(recipe) {
+        if (this.items.length >= 50) return;
+        if (!this.has(recipe.id)) {
+            this.items.push({ id: recipe.id, slug: recipe.slug, title: recipe.title });
+            this.save();
+        }
+    },
+
+    remove(recipeId) {
+        this.items = this.items.filter(r => r.id !== recipeId);
+        this.save();
+    },
+
+    has(recipeId) {
+        return this.items.some(r => r.id === recipeId);
+    },
+
+    toggle(recipe) {
+        if (this.has(recipe.id)) {
+            this.remove(recipe.id);
+        } else {
+            this.add(recipe);
+        }
+    },
+
+    clear() {
+        this.items = [];
+        this.save();
+    },
+
+    get count() {
+        return this.items.length;
+    },
+});
+
+// Basket page component
+Alpine.data('basketPage', () => ({
+    loading: false,
+    error: false,
+    recipes: [],
+    ingredients: [],
+    system: localStorage.getItem('unitSystem') || 'metric',
+
+    init() {
+        window.addEventListener('unit-system-changed', (e) => {
+            this.system = e.detail;
+        });
+        this.load();
+    },
+
+    async load() {
+        const items = this.$store.basket.items;
+        if (items.length === 0) {
+            this.recipes = [];
+            this.ingredients = [];
+            return;
+        }
+
+        this.loading = true;
+        this.error = false;
+
+        try {
+            const params = items.map(r => `recipe_ids[]=${r.id}`).join('&');
+            const res = await fetch(`/api/basket/ingredients?${params}`, {
+                headers: { 'Accept': 'application/json' },
+            });
+            if (!res.ok) throw new Error('Failed to load');
+            const data = await res.json();
+            this.recipes = data.recipes;
+            this.ingredients = data.ingredients;
+        } catch {
+            this.error = true;
+        } finally {
+            this.loading = false;
+        }
+    },
+
+    removeRecipe(recipeId) {
+        this.$store.basket.remove(recipeId);
+        this.load();
+    },
+
+    clearAll() {
+        this.$store.basket.clear();
+        this.recipes = [];
+        this.ingredients = [];
+    },
+
+    convertIngredient(amount, unit, name) {
+        if (!amount) {
+            return unit ? `${unit} ${name}` : name;
+        }
+        const result = convertUnit(parseFloat(amount), unit, this.system);
+        const formatted = formatAmount(result.amount);
+        if (result.unit) {
+            return `${formatted} ${result.unit} ${name}`;
+        }
+        return `${formatted} ${name}`;
+    },
+
+    toggleSystem() {
+        this.system = this.system === 'metric' ? 'imperial' : 'metric';
+        localStorage.setItem('unitSystem', this.system);
+        window.dispatchEvent(new CustomEvent('unit-system-changed', { detail: this.system }));
+    },
+}));
+
 window.Alpine = Alpine;
 Alpine.start();

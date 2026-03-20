@@ -4,7 +4,8 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('home') }}" class="text-xl font-bold text-orange-600 hover:text-orange-700">
+                    <a href="{{ route('home') }}" class="flex items-center gap-2 text-xl font-bold text-orange-600 hover:text-orange-700">
+                        <img src="/favicon-96x96.png" alt="Recip" class="h-5 w-5">
                         Recip
                     </a>
                 </div>
@@ -38,6 +39,15 @@
                         <span x-text="system === 'metric' ? 'Metric' : 'Imperial'"></span>
                     </button>
                 </div>
+
+                <!-- Basket -->
+                <a href="{{ route('basket.index') }}" class="hidden sm:flex items-center relative text-gray-500 hover:text-orange-600 transition-colors" title="Shopping basket">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
+                    <span x-show="$store.basket.count > 0"
+                          x-text="$store.basket.count"
+                          class="absolute -top-2 -right-2 bg-orange-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold"
+                          x-cloak></span>
+                </a>
 
                 @auth
                     <div class="hidden sm:flex sm:items-center">
@@ -103,11 +113,18 @@
             @endauth
         </div>
 
-        <div class="px-4 pb-3" x-data="unitToggle()">
+        <div class="px-4 pb-3 flex items-center gap-3" x-data="unitToggle()">
             <button @click="toggle()" class="text-xs font-medium px-3 py-1.5 rounded-full border transition-colors"
                 :class="system === 'metric' ? 'bg-orange-100 border-orange-300 text-orange-700' : 'bg-blue-100 border-blue-300 text-blue-700'">
                 <span x-text="system === 'metric' ? 'Metric' : 'Imperial'"></span>
             </button>
+            <a href="{{ route('basket.index') }}" class="relative text-gray-500 hover:text-orange-600 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
+                <span x-show="$store.basket.count > 0"
+                      x-text="$store.basket.count"
+                      class="absolute -top-2 -right-2 bg-orange-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold"
+                      x-cloak></span>
+            </a>
         </div>
 
         @auth

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BasketController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecipeController;
@@ -15,6 +16,10 @@ Route::get('/', [RecipeController::class, 'index'])->name('home');
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/recipes/{recipe}', [RecipeController::class, 'show'])->name('recipes.show');
 Route::get('/users/{user}', [UserProfileController::class, 'show'])->name('users.show');
+Route::get('/basket', [BasketController::class, 'index'])->name('basket.index');
+Route::get('/api/basket/ingredients', [BasketController::class, 'ingredients'])
+    ->middleware('throttle:30,1')
+    ->name('basket.ingredients');
 
 // Static pages
 Route::view('/privacy', 'pages.privacy')->name('privacy');

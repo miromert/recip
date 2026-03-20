@@ -1,6 +1,6 @@
 @props(['recipe'])
 
-<article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+<article x-data class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
     <a href="{{ route('recipes.show', $recipe) }}">
         @if($recipe->image_path)
             <img src="{{ asset('storage/' . $recipe->image_path) }}"
@@ -45,9 +45,17 @@
             <a href="{{ route('users.show', $recipe->user) }}" class="text-xs text-gray-500 hover:text-gray-700">
                 {{ $recipe->user->name }}
             </a>
-            @if($recipe->categories->isNotEmpty())
-                <span class="text-xs text-orange-600">{{ $recipe->categories->first()->name }}</span>
-            @endif
+            <div class="flex items-center gap-2">
+                @if($recipe->categories->isNotEmpty())
+                    <span class="text-xs text-orange-600">{{ $recipe->categories->first()->name }}</span>
+                @endif
+                <button @click.prevent="$store.basket.toggle({ id: {{ $recipe->id }}, slug: '{{ $recipe->slug }}', title: '{{ e($recipe->title) }}' })"
+                    class="p-1 rounded transition-colors"
+                    :class="$store.basket.has({{ $recipe->id }}) ? 'text-orange-600' : 'text-gray-400 hover:text-gray-600'"
+                    :title="$store.basket.has({{ $recipe->id }}) ? 'Remove from basket' : 'Add to basket'">
+                    <svg class="w-4 h-4" :fill="$store.basket.has({{ $recipe->id }}) ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
+                </button>
+            </div>
         </div>
     </div>
 </article>
